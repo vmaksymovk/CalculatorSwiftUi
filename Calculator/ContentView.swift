@@ -34,7 +34,7 @@ enum CalcButton: String {
 }
 
 enum Operation {
-    case add, subtract, multiply, divide, none
+    case add, subtract, multiply, divide, percent, none
 }
 
 struct ContentView: View {
@@ -91,7 +91,7 @@ struct ContentView: View {
     
     func didTap(button: CalcButton) {
         switch button {
-        case .add, .subtract, .multiply, .divide, .equal:
+        case .add, .subtract, .multiply, .divide, .equal, .percent:
             if button == .equal {
                 let currentValue = Double(self.value) ?? 0.0
                 let runningValue = self.runningNumber
@@ -100,6 +100,8 @@ struct ContentView: View {
                     self.value = "\(currentValue + runningValue)"
                 case .subtract:
                     self.value = "\(runningValue - currentValue)"
+                case .percent:
+                    self.value = "\((currentValue / 100) * runningValue)"
                 case .multiply:
                     self.value = "\(currentValue * runningValue)"
                 case .divide:
@@ -121,6 +123,9 @@ struct ContentView: View {
                     self.currentOperation = .multiply
                 } else if button == .divide {
                     self.currentOperation = .divide
+                } else if button == .percent {
+                    self.currentOperation = .percent
+                
                 }
                 self.runningNumber = Double(self.value) ?? 0.0
                 self.value = "0"
@@ -133,9 +138,9 @@ struct ContentView: View {
                 if !self.value.contains(".") {
                     self.value += "."
                 }
-            case .percent:
-                let currentValue = Double(self.value) ?? 0
-                self.value = "\(currentValue / 100)"
+//            case .percent:
+//                let currentValue = Double(self.value) ?? 0
+//                self.value = "\(currentValue / 100)"
             case .negative:
                 let currentValue = Double(self.value) ?? 0
                 self.value = "\(-currentValue)"
